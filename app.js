@@ -1,6 +1,8 @@
 let controller;
 let slideScene;
 let pageScene;
+let mouse = document.querySelector('.cursor');
+let mouseTxt = mouse.querySelector('span');
 
 function animateSlides() {
     //Initiate controller
@@ -45,7 +47,34 @@ function animateSlides() {
             .setTween(pageTimeline)
             .addTo(controller)
     });
-
 }
+
+function cursor(e) {
+    mouse.style.top = e.pageY + 'px';
+    mouse.style.left = e.pageX + 'px';
+}
+
+function activeCursor(e) {
+    const item = e.target;
+
+    if (item.id === 'logo' || item.classList.contains('burger')) {
+        mouse.classList.add('nav-active');
+    } else {
+        mouse.classList.remove('nav-active');
+    }
+
+    if (item.classList.contains('explore')) {
+        mouse.classList.add('explore-active');
+        gsap.to(".title-swipe", 1, { y: "0%" });
+        mouseTxt.innerText = 'Tap';
+    } else {
+        mouse.classList.remove('explore-active');
+        mouseTxt.innerText = '';
+        gsap.to(".title-swipe", 1, { y: "100%" });
+    }
+}
+
+window.addEventListener('mousemove', cursor);
+window.addEventListener('mouseover', activeCursor);
 
 animateSlides();
